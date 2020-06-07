@@ -1,9 +1,7 @@
-/* globals __DEV__ */
 import { Scene } from 'phaser';
-import ChristmasTree from '../sprites/ChristmasTree';
-import Background from '../sprites/Background';
-import DraggableChristmasTree from '../sprites/DraggableChristmasTree';
-import MovableChristmasTree from '../sprites/MovableChristmasTree';
+import ParallaxBackground from '../sprites/ParallaxBackground';
+import GameBox from "../sprites/GameObjects/GameBox";
+import GamePlaceholder from "../sprites/GameObjects/GamePlaceholder";
 
 class GameScene extends Scene {
     constructor() {
@@ -19,49 +17,31 @@ class GameScene extends Scene {
     }
 
     create() {
-        this.background = new Background({
+        this.sceneParallaxBackgroundSprite = new ParallaxBackground({
             scene: this,
-            x: 0,
-            y: 0,
-            asset: 'background',
-        }).setOrigin(0, 0);
-
-        this.christmastree = new ChristmasTree({
-            scene: this,
-            x: 400,
-            y: 200,
-            asset: 'christmas_tree',
-        }).setScale(3);
-
-        this.movablechristmastree = new MovableChristmasTree({
-            scene: this,
-            x: 650,
-            y: 300,
-            asset: 'christmas_tree',
-        }).setScale(3);
-
-        this.draggablechristmastree = new DraggableChristmasTree({
-            scene: this,
-            x: 500,
-            y: 300,
-            asset: 'christmas_tree',
-        }).setScale(3);
-
-        this.add.existing(this.background);
-        this.add.existing(this.christmastree);
-        this.add.existing(this.draggablechristmastree);
-        this.add.existing(this.movablechristmastree);
-
-        this.cameras.main.startFollow(this.movablechristmastree);
-
-        this.add.text(400, 100, 'Phaser 3 + Webpack 4 + ES6 + Cordova 8', {
-            font: '30px Roboto',
-            fill: '#7744ff',
         });
+
+        for (const parallaxBackground of this.sceneParallaxBackgroundSprite.getChildren()) {
+            this.add.existing(parallaxBackground);
+        }
+
+        const gameBox = new GameBox({
+            scene: this,
+            y: 20,
+        });
+        this.add.existing(gameBox);
+        gameBox.verticallyCenterObject();
+
+        const gamePlaceholder = new GamePlaceholder({
+            scene: this,
+            x: 167,
+            y: 33,
+        });
+        this.add.existing(gamePlaceholder);
     }
 
     update(time, delta) {
-        this.movablechristmastree.update(time, delta);
+        this.sceneParallaxBackgroundSprite.update(time, delta);
     }
 }
 

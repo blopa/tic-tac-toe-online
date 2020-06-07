@@ -20,7 +20,9 @@ module.exports = (env = {}) => {
     return {
         entry: {
             main: path.resolve(__dirname, 'src/main.js'),
-            vendor: ['phaser', 'fast-deep-equal'],
+            vendor: Object.keys(
+                require('./package.json').dependencies
+            ),
         },
         mode: 'production',
         output: {
@@ -37,6 +39,7 @@ module.exports = (env = {}) => {
                 CANVAS_RENDERER: JSON.stringify(true),
                 WEBGL_RENDERER: JSON.stringify(true),
                 IS_DEV: JSON.stringify(false),
+                VERSION: JSON.stringify(require('./package.json').version),
                 // if we have an .env file, use it, otherwise use the func argument
                 'process.env.HOST': JSON.stringify(process.env.HOST || env.HOST),
             }),
@@ -46,18 +49,18 @@ module.exports = (env = {}) => {
                     collapseWhitespace: true,
                     preserveLineBreaks: false,
                 },
-                title: 'base-phaser-cordova-project',
+                title: 'pixel-heroes-showdown',
                 favicon: `${IMAGE_DIR}/favicon.ico`,
                 template: `${MAIN_DIR}/index.html`,
                 filename: `${distPath}/index.html`,
                 publicPath: './build',
             }),
-            new CopyWebpackPlugin([
-                {
+            new CopyWebpackPlugin({
+                patterns: [{
                     from: 'assets',
                     to: '../assets',
-                },
-            ]),
+                }],
+            }),
         ],
         module: {
             rules: [

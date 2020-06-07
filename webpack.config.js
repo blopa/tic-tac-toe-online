@@ -14,7 +14,9 @@ const DIST_PATH = path.resolve(__dirname, 'dist');
 module.exports = {
     entry: {
         main: path.resolve(__dirname, 'src/main.js'),
-        vendor: ['phaser', 'webfontloader'],
+        vendor: Object.keys(
+            require('./package.json').dependencies
+        ),
     },
     mode: 'development',
     output: {
@@ -32,16 +34,11 @@ module.exports = {
             CANVAS_RENDERER: JSON.stringify(true),
             WEBGL_RENDERER: JSON.stringify(true),
             IS_DEV: JSON.stringify(true),
+            VERSION: JSON.stringify(require('./package.json').version),
         }),
         new HtmlWebpackPlugin({
             hash: true,
-            /*
-             * minify: {
-             *     collapseWhitespace: true,
-             *     preserveLineBreaks: false,
-             * },
-             */
-            title: 'base-phaser-cordova-project',
+            title: 'pixel-heroes-showdown',
             favicon: `${IMAGE_DIR}/favicon.ico`,
             template: `${MAIN_DIR}/index.html`,
             filename: `${DIST_PATH}/index.html`,

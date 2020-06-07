@@ -299,6 +299,7 @@ module.exports = {
     },
     settings: {
         'import/resolver': {
+            node: {},
             webpack: {
                 config: {
                     resolve: {
